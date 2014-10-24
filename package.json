@@ -1,0 +1,24 @@
+{
+  "name": "pushsmart-tcpserver",
+  "version": "0.0.1",
+  "description": "Node.js app implementing TCP server for PushSmart",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "~4.9.x",
+    "reconnect": "*"
+
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}
