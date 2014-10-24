@@ -80,7 +80,7 @@ var influx = require('influx');
 	var interval=false;
 
 		console.log("Socket connected " + ruppells_sockets_port + "\n");
-		socket.write("Welcome Joe oct 23, 2014 15:50:00 \n");
+		socket.write("Welcome Joe oct 23, 2014 18:20:00 \n");
 		inFluxDBGetData = true;
 
 		//socket.setEncoding('utf8'). 
