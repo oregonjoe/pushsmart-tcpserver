@@ -131,7 +131,7 @@ var influx = require('influx');
 
 								var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
-							client.query('deviceuid:6954717cc11e4bbf817d31b54404250b00000000.tcpserver:PushSmart.HelmSmart"  limit 1', function(err, influxresults)
+							client.query('select * from "deviceuid:6954717cc11e4bbf817d31b54404250b00000000.tcpserver:PushSmart.HelmSmart"  limit 1', function(err, influxresults)
 							{
 								if (err) {
 								console.log("Cannot write data", err);
