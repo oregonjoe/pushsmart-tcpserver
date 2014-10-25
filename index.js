@@ -128,6 +128,23 @@ var influx = require('influx');
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
 								pushsmartuid = data;
+
+								var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+
+							client.query('deviceuid:6954717cc11e4bbf817d31b54404250b00000000.tcpserver:PushSmart.HelmSmart"  limit 1', function(err, influxresults){
+							if (err) {
+								console.log("Cannot write data", err);
+					
+							}	  
+		 
+							console.log("Got data: from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
+		
+			
+							// get data base PushSmart record and write it out to connected client
+							point = influxresults[0].points[0];
+							console.log('deviceid:' + point[2] + '\r\n');
+
+							}
 						}
 
 						pushsmartinitflag = true;
