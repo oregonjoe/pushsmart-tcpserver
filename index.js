@@ -128,7 +128,7 @@ var influx = require('influx');
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
 								pushsmartuid = data;
-
+							/*
 								var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
 							client.query('select * from "deviceuid:6954717cc11e4bbf817d31b54404250b00000000.tcpserver:PushSmart.HelmSmart"  limit 1', function(err, influxresults)
@@ -145,6 +145,7 @@ var influx = require('influx');
 								console.log('deviceid:' + point[2] + '\r\n');
 
 							});
+							*/
 						}
 
 						pushsmartinitflag = true;
@@ -200,46 +201,7 @@ var influx = require('influx');
 		console.log("tcpserver connection error");
 	});
 
-/*
-	tcpserver.on('connection', function(stream) {
-	
-		//var peer = duplexEmitter(stream);
-		  var interval =
-		  setInterval(function() {
-			//peer.emit('hello', Date.now());
-			//stream.write('hello joe' +  Date.now() + "\n");
 
-		  // Get data from inFluxDB Server
-		  if(inFluxDBGetData == true)
-		  {
-			  var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
-
-			  client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 1000', function(err, influxresults){
-				if (err) {
-					console.log("Cannot write data", err);
-					//stream.write("Cannot get series data \n");
-				}	  
-		 
-				console.log("Got data: ", influxresults[0].points.length);
-		
-				for(i=0; i<influxresults[0].points.length; i++)
-				{
-					point = influxresults[0].points[i];
-				   //console.log(point[2] + '\n\r');
-					//socket.write(point[2] + '\n\r');
-					//peer.emit('', Date.now());
-					//peer.emit(point[2] + '\n\r');
-					stream.write(point[2] + '\n\r');
-					//peer.emit(point[2]);
-				}
-			
-
-				})
-			}
-
-		  }, 5000);
-	});
-*/
 	tcpserver.maxConnections = 20;
 
 	tcpserver.listen(ruppells_sockets_port);
