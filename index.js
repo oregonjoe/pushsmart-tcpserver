@@ -79,8 +79,8 @@ var influx = require('influx');
 
 	var interval=false;
 
-		console.log("Socket connected " + ruppells_sockets_port + "\n");
-		socket.write("Welcome Joe oct 23, 2014 18:20:00 \n");
+		console.log("Socket connected " + ruppells_sockets_port + "\r\n");
+		socket.write("Connected to PushSmart TCP Server \r\n");
 		inFluxDBGetData = true;
 
 		//socket.setEncoding('utf8'). 
@@ -132,8 +132,8 @@ var influx = require('influx');
 
 						pushsmartinitflag = true;
 				}
-				console.log("socket got data \n\r" + pushsmartdata_buffer + " length = " + data.length);
-				//socket.write("socket got data \n\r");
+				console.log("socket got data \r\n" + pushsmartdata_buffer + " length = " + data.length);
+				//socket.write("socket got data \r\n");
 			});
 
 
@@ -144,7 +144,7 @@ var influx = require('influx');
 				 // will write it out back (echo) to connected client
 			     //socket.write(pushsmartdata_buffer);
 			   
-			    //socket.write('hello joe' +  Date.now() + "\n\r");
+			    //socket.write('hello joe' +  Date.now() + "\r\n");
 				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
 			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 1000', function(err, influxresults){
@@ -159,7 +159,7 @@ var influx = require('influx');
 				{
 				    // get data base PushSmart record and write it out to connected client
 					point = influxresults[0].points[i];
-					socket.write(point[2] + '\n\r');
+					socket.write(point[2] + '\r\n');
 				}
 			
 				})
