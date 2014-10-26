@@ -158,10 +158,15 @@ var influx = require('influx');
 			/********* start  inFluxDB interval write ****************** */
 			
 			   interval = setInterval(function() {
+
+			   
 			     // if SeaSmart is pushing data to TCP Server then this
 				 // will write it out back (echo) to connected client
 			     //socket.write(pushsmartdata_buffer);
-			   
+
+				 get_pushsmart_data(socket, pushsmartuid );
+
+			   /*
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
 				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
@@ -181,7 +186,7 @@ var influx = require('influx');
 				}
 			
 				})
-
+				*/
 				
 
 		    }, 30000);
@@ -207,4 +212,31 @@ var influx = require('influx');
 	tcpserver.listen(ruppells_sockets_port);
     console.log("TCP listening on " + ruppells_sockets_port);
 
+}
+
+function get_pushsmart_data(mysocket, pushsmartuid )
+{
+			     // if SeaSmart is pushing data to TCP Server then this
+				 // will write it out back (echo) to connected client
+			     //socket.write(pushsmartdata_buffer);
+			   
+			    //socket.write('hello joe' +  Date.now() + "\r\n");
+				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+
+			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 1000', function(err, influxresults){
+				if (err) {
+					console.log("Cannot write data", err);
+					
+				}	  
+		 
+				console.log("Got data: from ->" + pushsmartuid + ": " + influxresults[0].points.length);
+		
+				for(i=0; i<influxresults[0].points.length; i++)
+				{
+				    // get data base PushSmart record and write it out to connected client
+					point = influxresults[0].points[i];
+					mysocket.write(point[2] + '\r\n');
+				}
+			
+				})
 }
