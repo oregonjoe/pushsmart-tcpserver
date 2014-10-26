@@ -184,7 +184,7 @@ var influx = require('influx');
 
 				
 
-		    }, 5000);
+		    }, 30000);
 
 			
 	      /********* end of inFluxDB interval write ****************** */
