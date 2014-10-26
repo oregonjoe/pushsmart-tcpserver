@@ -84,6 +84,7 @@ var influx = require('influx');
 		inFluxDBGetData = true;
 
 		//socket.setEncoding('utf8'). 
+		get_pushsmart_data(socket, pushsmartuid );
 
 		   tcpserver.getConnections(function(error, count){
 			console.log('current tcp connections = ' + count);
@@ -170,7 +171,7 @@ var influx = require('influx');
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
 				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
-			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 1000', function(err, influxresults){
+			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 300', function(err, influxresults){
 				if (err) {
 					console.log("Cannot write data", err);
 					
@@ -223,7 +224,7 @@ function get_pushsmart_data(mysocket, pushsmartuid )
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
 				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
-			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 1000', function(err, influxresults){
+			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 500', function(err, influxresults){
 				if (err) {
 					console.log("Cannot write data", err);
 					
