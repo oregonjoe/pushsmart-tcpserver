@@ -49,7 +49,7 @@ if ( tcp ) {
       password: 'c73d5a8b1b07d17b'
     },
     db: {
-      name: 'pushsmart',
+      name: 'pushsmart-final',
       username: 'root',
       password: 'c73d5a8b1b07d17b'
     },
