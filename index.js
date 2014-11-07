@@ -75,6 +75,7 @@ var influx = require('influx');
 
     tcpserver.on('connection', function(socket) {
 	var pushsmartuid = "";
+	var pushsmartdeviceid = "";
 	var pushsmartinitflag = false;
 
 	var interval=false;
@@ -129,10 +130,12 @@ var influx = require('influx');
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
 								pushsmartuid = data;
-							/*
-								var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+							
+							var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+							
+							querystr = 'select deviceid from "deviceuid:' + pushsmartuid + '.tcpserver:PushSmart.HelmSmart"  limit 1';
 
-							client.query('select * from "deviceuid:6954717cc11e4bbf817d31b54404250b00000000.tcpserver:PushSmart.HelmSmart"  limit 1', function(err, influxresults)
+							client.query(querystr , function(err, influxresults)
 							{
 								if (err) {
 								console.log("Cannot write data", err);
@@ -146,7 +149,7 @@ var influx = require('influx');
 								console.log('deviceid:' + point[2] + '\r\n');
 
 							});
-							*/
+							
 						}
 
 						pushsmartinitflag = true;
