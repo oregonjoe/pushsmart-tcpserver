@@ -150,11 +150,13 @@ var influx = require('influx');
 			
 								// get data base PushSmart record and write it out to connected client
 								point = influxresults[0].points[0];
-								console.log('deviceid:' + point[2] + '\r\n');
-
+								//console.log('deviceid:' + point[2] + '\r\n');
+								pushsmartdeviceid = point[2]
+								console.log('deviceid:' + pushsmartdeviceid + '\r\n');
+								pushsmartinitflag = true;
 							});
 							
-							pushsmartinitflag = true;
+							
 						}
 
 						
@@ -165,7 +167,8 @@ var influx = require('influx');
 
 
 			/********* start  inFluxDB interval write ****************** */
-			
+			   if(pushsmartdeviceid != "")
+			   {
 			   interval = setInterval(function() {
 
 			   
@@ -173,7 +176,7 @@ var influx = require('influx');
 				 // will write it out back (echo) to connected client
 			     //socket.write(pushsmartdata_buffer);
 
-				 get_pushsmart_data(socket, pushsmartuid );
+				 get_pushsmart_data(socket, pushsmartdeviceid );
 
 			   /*
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
@@ -199,7 +202,7 @@ var influx = require('influx');
 				
 
 		    }, 30000);
-
+			}
 			
 	      /********* end of inFluxDB interval write ****************** */
 
@@ -223,7 +226,7 @@ var influx = require('influx');
 
 }
 
-function get_pushsmart_data(mysocket, pushsmartuid )
+function get_pushsmart_data(mysocket, pushsmartdeviceid )
 {
 			     // if SeaSmart is pushing data to TCP Server then this
 				 // will write it out back (echo) to connected client
@@ -238,7 +241,7 @@ function get_pushsmart_data(mysocket, pushsmartuid )
 					
 				}	  
 		 
-				console.log("get_pushsmart_data: Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length);
+				console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
 		
 				for(i=0; i<influxresults[0].points.length; i++)
 				{
