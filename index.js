@@ -135,7 +135,8 @@ var influx = require('influx');
 							// need to put in UID check here to be sure all characters are Hex types.
 							//var isHex = pushsmartuid.match("[0-9A-F]+");
 							PSUIDstr = toString(pushsmartuid);
-							if(PSUIDstr.match(/^[0-9A-F]{40}&/i) == null)
+							//if(PSUIDstr.match(/^[0-9A-F]{40}&/i) == null)
+							if(PSUIDstr.match(/[0-9A-F]+/i) == null)
 							{
 								console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
 								return
