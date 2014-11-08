@@ -132,6 +132,7 @@ var influx = require('influx');
 					   {		//probably a iOS UID from iNax
 							pushsmartuid = data;
 							console.log('pushsmartinit:' + pushsmartuid + '\r\n');
+							// need to put in UID check here to be sure all characters are Hex types.
 							
 							var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 							
@@ -153,9 +154,10 @@ var influx = require('influx');
 
 							});
 							
+							pushsmartinitflag = true;
 						}
 
-						pushsmartinitflag = true;
+						
 				}
 				console.log("socket got data \r\n" + pushsmartdata_buffer + " length = " + data.length);
 				//socket.write("socket got data \r\n");
