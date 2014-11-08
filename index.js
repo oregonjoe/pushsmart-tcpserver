@@ -129,19 +129,21 @@ var influx = require('influx');
 					// check data length
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
-								pushsmartuid = data;
+							pushsmartuid = data;
+							console.log('pushsmartinit:' + pushsmartuid + '\r\n');
 							
 							var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 							
 							querystr = 'select deviceid from "deviceuid:' + pushsmartuid + '.tcpserver:PushSmart.HelmSmart"  limit 1';
-
+							console.log('pushsmartinit:' + querystr + '\r\n');
+							
 							client.query(querystr , function(err, influxresults)
 							{
 								if (err) {
 								console.log("Cannot write data", err);
 								}	  
 		 
-								console.log("Got data: from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
+								console.log("pushsmartinit:Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
 		
 			
 								// get data base PushSmart record and write it out to connected client
@@ -233,7 +235,7 @@ function get_pushsmart_data(mysocket, pushsmartuid )
 					
 				}	  
 		 
-				console.log("Got data: from ->" + pushsmartuid + ": " + influxresults[0].points.length);
+				console.log("get_pushsmart_data: Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length);
 		
 				for(i=0; i<influxresults[0].points.length; i++)
 				{
