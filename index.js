@@ -164,6 +164,8 @@ var influx = require('influx');
 								pushsmartdeviceid = point[2]
 								console.log('deviceid:' + pushsmartdeviceid + '\r\n');
 								pushsmartinitflag = true;
+								
+								get_pushsmart_data(socket, pushsmartdeviceid );
 							});
 							
 							
