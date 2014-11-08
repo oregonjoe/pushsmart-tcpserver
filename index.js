@@ -167,8 +167,7 @@ var influx = require('influx');
 
 
 			/********* start  inFluxDB interval write ****************** */
-			   if(pushsmartdeviceid != "")
-			   {
+		
 			   interval = setInterval(function() {
 
 			   
@@ -202,7 +201,7 @@ var influx = require('influx');
 				
 
 		    }, 30000);
-			}
+			
 			
 	      /********* end of inFluxDB interval write ****************** */
 
@@ -231,7 +230,8 @@ function get_pushsmart_data(mysocket, pushsmartdeviceid )
 			     // if SeaSmart is pushing data to TCP Server then this
 				 // will write it out back (echo) to connected client
 			     //socket.write(pushsmartdata_buffer);
-			   
+			   if(pushsmartdeviceid == "")
+			   return;
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
 				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 
