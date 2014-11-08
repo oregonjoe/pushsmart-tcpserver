@@ -76,6 +76,7 @@ var influx = require('influx');
     tcpserver.on('connection', function(socket) {
 	var pushsmartuid = "";
 	var pushsmartdeviceid = "";
+	var pushsmartinterval = 0;
 	var pushsmartinitflag = false;
 
 	var interval=false;
@@ -166,7 +167,7 @@ var influx = require('influx');
 								console.log('deviceid:' + pushsmartdeviceid + ' interval:' + pushsmartinterval + '\r\n');
 								pushsmartinitflag = true;
 								
-								get_pushsmart_data(socket, pushsmartdeviceid );
+								get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
 							});
 							
 							
@@ -188,7 +189,7 @@ var influx = require('influx');
 				 // will write it out back (echo) to connected client
 			     //socket.write(pushsmartdata_buffer);
 
-				 get_pushsmart_data(socket, pushsmartdeviceid );
+				 get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
 
 			   /*
 			    //socket.write('hello joe' +  Date.now() + "\r\n");
@@ -238,17 +239,44 @@ var influx = require('influx');
 
 }
 
-function get_pushsmart_data(mysocket, pushsmartdeviceid )
+function get_pushsmart_data(mysocket, pushsmartdeviceid, pushsmartinterval )
 {
 	// if SeaSmart is pushing data to TCP Server then this
 	// will write it out back (echo) to connected client
 	//socket.write(pushsmartdata_buffer);
 	if(pushsmartdeviceid == "")
 		return;
-			   
+	
+var queryinterval = "1m";
+	
+	if(pushsmartinterval == 0)
+		queryinterval = "1m";
+	else if (pushsmartinterval == 1)
+		queryinterval = "1m";
+	else if (pushsmartinterval == 2)
+		queryinterval = "2m";
+	else if (pushsmartinterval == 3)
+		queryinterval = "3m";
+	else if (pushsmartinterval == 4)
+		queryinterval = "4m";
+	else if (pushsmartinterval == 5)
+		queryinterval = "5m";
+	else if (pushsmartinterval == 6)
+		queryinterval = "10m";
+	else if (pushsmartinterval == 7)
+		queryinterval = "15m";
+	else if (pushsmartinterval == 8)
+		queryinterval = "30m";	
+	else if (pushsmartinterval == 9)
+		queryinterval = "60m";
+	else 
+		queryinterval = "1m";
+		
+		
 	var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 	
-	querystr = 'select psvalue from "deviceid:' + pushsmartdeviceid + '.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 500'
+	//querystr = 'select psvalue from "deviceid:' + pushsmartdeviceid + '.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 500'
+	querystr = 'select psvalue from "deviceid:' + pushsmartdeviceid + '.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - '+ queryinterval + ' limit 1000'
 
 	client.query(querystr, function(err, influxresults){
 		if (err) {
