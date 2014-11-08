@@ -146,7 +146,7 @@ var influx = require('influx');
 							
 							var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 							
-							querystr = 'select deviceid from "deviceuid:' + pushsmartuid + '.tcpserver:PushSmart.HelmSmart"  limit 1';
+							querystr = 'select deviceid, interval from "deviceuid:' + pushsmartuid + '.tcpserver:PushSmart.HelmSmart"  limit 1';
 							console.log('pushsmartinit:' + querystr + '\r\n');
 							
 							client.query(querystr , function(err, influxresults)
@@ -161,8 +161,9 @@ var influx = require('influx');
 								// get data base PushSmart record and write it out to connected client
 								point = influxresults[0].points[0];
 								//console.log('deviceid:' + point[2] + '\r\n');
-								pushsmartdeviceid = point[2]
-								console.log('deviceid:' + pushsmartdeviceid + '\r\n');
+								pushsmartdeviceid = point[2];
+								pushsmartinterval = point[3];
+								console.log('deviceid:' + pushsmartdeviceid + ' interval:' + pushsmartinterval + '\r\n');
 								pushsmartinitflag = true;
 								
 								get_pushsmart_data(socket, pushsmartdeviceid );
