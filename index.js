@@ -123,7 +123,8 @@ var influx = require('influx');
 
 			socket.on('data', function(data) {
 				pushsmartdata_buffer = data;
-
+				console.log('on_data:got somthing ' + data.length + '\r\n');
+				
 				if(pushsmartinitflag == false)
 				{
 					// check data length
