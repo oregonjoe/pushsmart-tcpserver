@@ -133,6 +133,14 @@ var influx = require('influx');
 							pushsmartuid = data;
 							console.log('pushsmartinit:' + pushsmartuid + '\r\n');
 							// need to put in UID check here to be sure all characters are Hex types.
+							boolean isHex = pushsmartuid.matches("[0-9A-F]+");
+							if(isHex == false)
+							{
+								console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
+								return
+							}
+							
+							console.log('pushsmartinit: valid Hex string\r\n');
 							
 							var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
 							
