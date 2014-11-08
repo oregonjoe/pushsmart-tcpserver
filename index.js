@@ -227,28 +227,30 @@ var influx = require('influx');
 
 function get_pushsmart_data(mysocket, pushsmartdeviceid )
 {
-			     // if SeaSmart is pushing data to TCP Server then this
-				 // will write it out back (echo) to connected client
-			     //socket.write(pushsmartdata_buffer);
-			   if(pushsmartdeviceid == "")
-			   return;
-			    //socket.write('hello joe' +  Date.now() + "\r\n");
-				var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+	// if SeaSmart is pushing data to TCP Server then this
+	// will write it out back (echo) to connected client
+	//socket.write(pushsmartdata_buffer);
+	if(pushsmartdeviceid == "")
+		return;
+			   
+	var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+	
+	querystr = 'select psvalue from "deviceid:' + pushsmartdeviceid + '.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 500'
 
-			    client.query('select psvalue from "deviceid:001EC0B415C2.sensor:tcp.source:0.instance:0.type:pushsmart.parameter:raw.HelmSmart" where time > now() - 2m limit 500', function(err, influxresults){
-				if (err) {
-					console.log("Cannot write data", err);
+	client.query(querystr, function(err, influxresults){
+		if (err) {
+			console.log("Cannot write data", err);
 					
-				}	  
+		}	  
 		 
-				console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
+	console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
 		
-				for(i=0; i<influxresults[0].points.length; i++)
-				{
-				    // get data base PushSmart record and write it out to connected client
-					point = influxresults[0].points[i];
-					mysocket.write(point[2] + '\r\n');
-				}
+		for(i=0; i<influxresults[0].points.length; i++)
+		{
+			// get data base PushSmart record and write it out to connected client
+			point = influxresults[0].points[i];
+			mysocket.write(point[2] + '\r\n');
+		}
 			
-				})
+	})
 }
