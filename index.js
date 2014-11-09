@@ -135,16 +135,18 @@ var influx = require('influx');
 						myDeviceID = tcp_json.deviceid;
 						console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
 						pushsmartdeviceid = myDeviceID;
-						pushsmartinterval = 0;
+						pushsmartinterval = 2;
 					
 						pushsmartinitflag = true;
+						get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
 					} 
 					catch (e) 
 					{
 							console.log("Not a JSON object", e);
 					}
-					
-					
+				}
+				if(pushsmartinitflag == false)
+				{	
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
 							pushsmartuid = data;
@@ -189,7 +191,7 @@ var influx = require('influx');
 							
 						}
 
-						
+					
 				}
 				console.log("socket got data \r\n" + pushsmartdata_buffer + " length = " + data.length);
 				//socket.write("socket got data \r\n");
