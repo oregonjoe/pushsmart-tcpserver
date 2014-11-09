@@ -176,7 +176,7 @@ var influx = require('influx');
 		 
 								console.log("pushsmartinit:Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
 		
-			
+								try{
 								// get data base PushSmart record and write it out to connected client
 								point = influxresults[0].points[0];
 								//console.log('deviceid:' + point[2] + '\r\n');
@@ -186,6 +186,12 @@ var influx = require('influx');
 								pushsmartinitflag = true;
 								
 								get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
+								} 
+								catch (e) 
+								{
+										console.log("pushsmartinit:Error in inFluxDB select deviceid", e);
+								}
+								
 							});
 							
 							
@@ -304,12 +310,18 @@ var queryinterval = "1m";
 		 
 	console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
 		
-		for(i=0; i<influxresults[0].points.length; i++)
-		{
-			// get data base PushSmart record and write it out to connected client
-			point = influxresults[0].points[i];
-			mysocket.write(point[2] + '\r\n');
-		}
+		try{
+				for(i=0; i<influxresults[0].points.length; i++)
+				{
+					// get data base PushSmart record and write it out to connected client
+					point = influxresults[0].points[i];
+					mysocket.write(point[2] + '\r\n');
+				}
+			} 
+			catch (e) 
+			{
+				console.log("get_pushsmart_data:Error in inFluxDB select psvalue", e);
+			}
 			
 	})
 }
