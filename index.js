@@ -129,6 +129,18 @@ var influx = require('influx');
 				if(pushsmartinitflag == false)
 				{
 					// check data length
+					try{
+					 tcp_json = JSON.parse(data)
+					 myAppType = tcp_json.[app];
+					 myDeviceID = tcp_json.[deviceid];
+					 console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
+					} 
+					catch (e) 
+					{
+							console.log("Not a JSON object", e);
+					}
+					
+					
 					   if(data.length == 40)
 					   {		//probably a iOS UID from iNax
 							pushsmartuid = data;
