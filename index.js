@@ -130,10 +130,14 @@ var influx = require('influx');
 				{
 					// check data length
 					try{
-					 tcp_json = JSON.parse(data)
-					 myAppType = tcp_json.app;
-					 myDeviceID = tcp_json.deviceid;
-					 console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
+						tcp_json = JSON.parse(data)
+						myAppType = tcp_json.app;
+						myDeviceID = tcp_json.deviceid;
+						console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
+						pushsmartdeviceid = myDeviceID;
+						pushsmartinterval = 0;
+					
+						pushsmartinitflag = true;
 					} 
 					catch (e) 
 					{
