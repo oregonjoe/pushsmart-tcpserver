@@ -132,17 +132,92 @@ var influx = require('influx');
 					try{
 						tcp_json = JSON.parse(data)
 						myAppType = tcp_json.app;
-						myDeviceID = tcp_json.deviceid;
-						console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
-						pushsmartdeviceid = myDeviceID;
-						pushsmartinterval = 2;
-					
-						pushsmartinitflag = true;
-						get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
-					} 
+						} 
 					catch (e) 
 					{
 							console.log("Not a JSON object", e);
+					}
+					if(myAppType == "NMEAremoteBETA")
+					{
+							try{
+								tcp_json = JSON.parse(data)
+								myDeviceID = tcp_json.deviceiOSUID;
+								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID = ' + myDeviceID + ' \r\n');
+								pushsmartdeviceid = myDeviceID;
+								pushsmartinterval = 2;
+							
+								if(pushsmartuid.length == 40)
+							   {		//probably a iOS UID from iNax
+									//pushsmartuid = data;
+									console.log('pushsmartinit:' + pushsmartuid + '\r\n');
+									// need to put in UID check here to be sure all characters are Hex types.
+									//var isHex = pushsmartuid.match("[0-9A-F]+");
+									PSUIDstr = toString(pushsmartuid);
+									//if(PSUIDstr.match(/^[0-9A-F]{40}&/i) == null)
+									if(PSUIDstr.match(/[0-9A-F]+/i) == null)
+									{
+										console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
+										return
+									}
+									
+									console.log('pushsmartinit: valid Hex string\r\n');
+									
+									var client = influx({host : info.server.host, port: info.server.port, username: info.server.username, password : info.server.password, database : info.db.name});
+									
+									querystr = 'select deviceid, interval from "deviceuid:' + pushsmartuid + '.tcpserver:PushSmart.HelmSmart"  limit 1';
+									console.log('pushsmartinit:' + querystr + '\r\n');
+									
+									client.query(querystr , function(err, influxresults)
+									{
+										if (err) {
+										console.log("Cannot write data", err);
+										}	  
+				 
+										console.log("pushsmartinit:Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
+				
+										try{
+										// get data base PushSmart record and write it out to connected client
+										point = influxresults[0].points[0];
+										//console.log('deviceid:' + point[2] + '\r\n');
+										pushsmartdeviceid = point[2];
+										pushsmartinterval = point[3];
+										console.log('deviceid:' + pushsmartdeviceid + ' interval:' + pushsmartinterval + '\r\n');
+										pushsmartinitflag = true;
+										
+										get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
+										} 
+										catch (e) 
+										{
+												console.log("pushsmartinit:Error in inFluxDB select deviceid", e);
+										}
+										
+									});
+									
+									
+								}
+							} 
+							catch (e) 
+							{
+									console.log("Not a JSON object", e);
+							}
+					}
+					else{
+					try{
+								tcp_json = JSON.parse(data)
+								
+								myAppType = tcp_json.app;
+								myDeviceID = tcp_json.deviceid;
+								console.log('pushsmartinit: JSON app = ' + myAppType + ' DeviceID = ' + myDeviceID + ' \r\n');
+								pushsmartdeviceid = myDeviceID;
+								pushsmartinterval = 2;
+							
+								pushsmartinitflag = true;
+								get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
+							} 
+							catch (e) 
+							{
+									console.log("Not a JSON object", e);
+							}
 					}
 				}
 				if(pushsmartinitflag == false)
