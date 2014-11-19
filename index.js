@@ -78,7 +78,7 @@ var influx = require('influx');
 	var pushsmartdeviceid = "";
 	var pushsmartinterval = 0;
 	var pushsmartinitflag = false;
-
+    var myAppType="";
 	var interval=false;
 
 		console.log("Socket connected " + ruppells_sockets_port + "\r\n");
