@@ -132,7 +132,7 @@ var influx = require('influx');
 				{
 					// Try to see if its a full JSON string
 				
-					myJSONstr=pushsmartdata_buffer.substring(str.indexOf('{'),str.indexOf('}'))
+					myJSONstr=pushsmartdata_buffer.substring(pushsmartdata_buffer.indexOf('{'),pushsmartdata_buffer.indexOf('}'))
 					if(myJSONstr == "")
 						console.log('Not a JSON string \r\n');
 					else
