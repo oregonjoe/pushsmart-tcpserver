@@ -64,7 +64,7 @@ var influx = require('influx');
 
 	var inFluxDBGetData = false;
 
-	var pushsmartdata_buffer;
+	var pushsmartdata_buffer="";
 
 
 	 var util = require('util');
@@ -80,10 +80,12 @@ var influx = require('influx');
 	var pushsmartinitflag = false;
     var myAppType="";
 	var interval=false;
+	var myJSONstr="";
 
 		console.log("Socket connected " + ruppells_sockets_port + "\r\n");
 		socket.write("Connected to PushSmart TCP Server \r\n");
 		inFluxDBGetData = true;
+		pushsmartdata_buffer="";
 
 		//socket.setEncoding('utf8'). 
 		get_pushsmart_data(socket, pushsmartuid );
@@ -123,14 +125,26 @@ var influx = require('influx');
 			});
 
 			socket.on('data', function(data) {
-				pushsmartdata_buffer = data;
+				pushsmartdata_buffer = pushsmartdata_buffer + data;
 				console.log('on_data:got somthing ' + data.length + '\r\n');
 				
 				if(pushsmartinitflag == false)
 				{
+					// Try to see if its a full JSON string
+				
+					myJSONstr=pushsmartdata_buffer.substring(str.indexOf('{'),str.indexOf('}'))
+					if(myJSONstr == "")
+						console.log('Not a JSON string \r\n');
+					else
+					{
+						console.log('Got a JSON like string:' + myJSONstr + '\r\n');
+						pushsmartdata_buffer="";
+						}
+				
+				
 					// check data length
 					try{
-						tcp_json = JSON.parse(data)
+						tcp_json = JSON.parse(myJSONstr)
 						myAppType = tcp_json.app;
 						} 
 					catch (e) 
@@ -140,7 +154,7 @@ var influx = require('influx');
 					if(myAppType == "NMEAremoteBETA")
 					{
 							try{
-								tcp_json = JSON.parse(data)
+								tcp_json = JSON.parse(myJSONstr)
 								pushsmartuid = tcp_json.deviceiOSUID;
 								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID=' + pushsmartuid + '##\r\n');
 								pushsmartdeviceid = "";
@@ -203,7 +217,7 @@ var influx = require('influx');
 					}
 					else{
 					try{
-								tcp_json = JSON.parse(data)
+								tcp_json = JSON.parse(myJSONstr)
 								
 								myAppType = tcp_json.app;
 								myDeviceID = tcp_json.deviceid;
