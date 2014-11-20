@@ -142,7 +142,7 @@ var influx = require('influx');
 							try{
 								tcp_json = JSON.parse(data)
 								myDeviceID = tcp_json.deviceiOSUID;
-								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID = ' + myDeviceID + ' \r\n');
+								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID=' + myDeviceID + '##\r\n');
 								pushsmartdeviceid = myDeviceID;
 								pushsmartinterval = 2;
 							
