@@ -141,9 +141,9 @@ var influx = require('influx');
 					{
 							try{
 								tcp_json = JSON.parse(data)
-								myDeviceID = tcp_json.deviceiOSUID;
-								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID=' + myDeviceID + '##\r\n');
-								pushsmartdeviceid = myDeviceID;
+								pushsmartuid = tcp_json.deviceiOSUID;
+								console.log('pushsmartinit: JSON app = ' + myAppType + ' deviceiOSUID=' + pushsmartuid + '##\r\n');
+								pushsmartdeviceid = "";
 								pushsmartinterval = 2;
 							
 								if(pushsmartuid.length == 40)
@@ -344,7 +344,10 @@ function get_pushsmart_data(mysocket, pushsmartdeviceid, pushsmartinterval )
 	// will write it out back (echo) to connected client
 	//socket.write(pushsmartdata_buffer);
 	if(pushsmartdeviceid == "")
+	{
+	console.log("get_pushsmart_data: pushsmartdeviceid is empty");
 		return;
+		}
 	
 var queryinterval = "1m";
 	
