@@ -132,7 +132,7 @@ var influx = require('influx');
 				{
 					// Try to see if its a full JSON string
 				
-					myJSONstr=pushsmartdata_buffer.substring(pushsmartdata_buffer.indexOf('{'),pushsmartdata_buffer.indexOf('}'))
+					myJSONstr=pushsmartdata_buffer.substring(pushsmartdata_buffer.indexOf('{'),(pushsmartdata_buffer.indexOf('}')+1))
 					if(myJSONstr == "")
 						console.log('Not a JSON string \r\n');
 					else
@@ -327,7 +327,7 @@ var influx = require('influx');
 				*/
 				
 
-		    }, 30000);
+		    }, 14000);
 			
 			
 	      /********* end of inFluxDB interval write ****************** */
