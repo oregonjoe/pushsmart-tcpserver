@@ -171,6 +171,7 @@ var influx = require('influx');
 									if(PSUIDstr.match(/[0-9A-F]+/i) == null)
 									{
 										console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
+										socket.write("pushsmartinit: error .... DUID invalid Hex String\r\n");
 										return
 									}
 									
@@ -187,7 +188,7 @@ var influx = require('influx');
 											console.log("Cannot write data", err);
 											pushsmartdeviceid="";
 											pushsmartinterval=2;
-											mysocket.write("Device UID is not registered in HelmSmart \r\n");
+											socket.write("Device UID is not registered in HelmSmart \r\n");
 										}	  
 										else
 										{
@@ -252,7 +253,7 @@ var influx = require('influx');
 							if(PSUIDstr.match(/[0-9A-F]+/i) == null)
 							{
 								console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
-								mysocket.write("Device UID is not registered in HelmSmart \r\n");
+								socket.write("Device UID is not registered in HelmSmart \r\n");
 								return
 							}
 							
@@ -267,7 +268,7 @@ var influx = require('influx');
 							{
 								if (err) {
 									console.log("Cannot write data", err);
-									mysocket.write("Device UID is not registered in HelmSmart \r\n");
+									socket.write("Device UID is not registered in HelmSmart \r\n");
 								}
 								else{								
 		 
@@ -295,7 +296,7 @@ var influx = require('influx');
 							
 						}
 						console.log("Invalid Device UID is not registered in HelmSmart \r\n");
-						mysocket.write("Invalid Device UID is not registered in HelmSmart \r\n");
+						socket.write("Invalid Device UID is not registered in HelmSmart \r\n");
 
 					
 				}
