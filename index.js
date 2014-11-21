@@ -187,6 +187,7 @@ var influx = require('influx');
 											console.log("Cannot write data", err);
 											pushsmartdeviceid="";
 											pushsmartinterval=2;
+											mysocket.write("Device UID is not registered in HelmSmart \r\n");
 										}	  
 										else
 										{
@@ -251,6 +252,7 @@ var influx = require('influx');
 							if(PSUIDstr.match(/[0-9A-F]+/i) == null)
 							{
 								console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
+								mysocket.write("Device UID is not registered in HelmSmart \r\n");
 								return
 							}
 							
@@ -264,31 +266,36 @@ var influx = require('influx');
 							client.query(querystr , function(err, influxresults)
 							{
 								if (err) {
-								console.log("Cannot write data", err);
-								}	  
+									console.log("Cannot write data", err);
+									mysocket.write("Device UID is not registered in HelmSmart \r\n");
+								}
+								else{								
 		 
-								console.log("pushsmartinit:Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
-		
-								try{
-								// get data base PushSmart record and write it out to connected client
-								point = influxresults[0].points[0];
-								//console.log('deviceid:' + point[2] + '\r\n');
-								pushsmartdeviceid = point[2];
-								pushsmartinterval = point[3];
-								console.log('deviceid:' + pushsmartdeviceid + ' interval:' + pushsmartinterval + '\r\n');
-								pushsmartinitflag = true;
-								
-								get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
-								} 
-								catch (e) 
-								{
-										console.log("pushsmartinit:Error in inFluxDB select deviceid", e);
+									console.log("pushsmartinit:Got data from ->" + pushsmartuid + ": " + influxresults[0].points.length + '\r\n');
+			
+									try{
+									// get data base PushSmart record and write it out to connected client
+									point = influxresults[0].points[0];
+									//console.log('deviceid:' + point[2] + '\r\n');
+									pushsmartdeviceid = point[2];
+									pushsmartinterval = point[3];
+									console.log('deviceid:' + pushsmartdeviceid + ' interval:' + pushsmartinterval + '\r\n');
+									pushsmartinitflag = true;
+									
+									get_pushsmart_data(socket, pushsmartdeviceid, pushsmartinterval );
+									} 
+									catch (e) 
+									{
+											console.log("pushsmartinit:Error in inFluxDB select deviceid", e);
+									}
 								}
 								
 							});
 							
 							
 						}
+						console.log("Invalid Device UID is not registered in HelmSmart \r\n");
+						mysocket.write("Invalid Device UID is not registered in HelmSmart \r\n");
 
 					
 				}
