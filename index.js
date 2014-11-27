@@ -171,7 +171,7 @@ var influx = require('influx');
 									if(PSUIDstr.match(/[0-9A-F]+/i) == null)
 									{
 										console.log('pushsmartinit: error .... DUID invalid Hex String \r\n');
-										socket.write("pushsmartinit: error .... DUID invalid Hex String\r\n");
+										socket.write("pushsmartinit: error .... DUID   invalid Hex String\r\n");
 										return
 									}
 									
