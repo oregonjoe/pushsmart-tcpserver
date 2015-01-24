@@ -410,10 +410,18 @@ var queryinterval = "1m";
 		if (err) {
 			console.log("Cannot write data", err);
 					
-		}	  
-		 
-	console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
+		}	
+
 		
+		try{
+			console.log("get_pushsmart_data: Got data from ->" + pushsmartdeviceid + ": " + influxresults[0].points.length);
+		} 
+		catch (e) 
+		{
+			console.log("get_pushsmart_data:Error in inFluxDB query", e);
+		}
+			
+			
 		try{
 				for(i=0; i<influxresults[0].points.length; i++)
 				{
