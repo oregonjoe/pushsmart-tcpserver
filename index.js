@@ -358,6 +358,7 @@ var influx = require('influx');
 
 
 	tcpserver.maxConnections = 20;
+	tcpserver.setKeepAlive('enabled');
 
 	tcpserver.listen(ruppells_sockets_port);
     console.log("TCP listening on " + ruppells_sockets_port);
